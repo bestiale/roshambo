@@ -6,6 +6,7 @@ from random import randint
 from time import sleep
 
 class Game(object):
+
     user_pt = 0
     cpu_pt = 0
     schere = 1
@@ -13,6 +14,7 @@ class Game(object):
     papier = 3
 
     def play(self):
+
         name = self.intro()
 
         try:
@@ -27,6 +29,7 @@ class Game(object):
         
             
     def intro(self):
+        
         name = raw_input("Please enter your name: > ")
         print "\n************************"
         print "Hello %s :) " % name
@@ -35,6 +38,7 @@ class Game(object):
         return name
         
     def cpu_hand(self):
+
         cpu = randint(1, 3)
         return cpu
 
@@ -85,27 +89,22 @@ class Game(object):
         if user == cpu:
             print "Nobody receives the point\n"
             sleep(3)
-            return 0
             
         elif user == self.schere and cpu == self.papier:
             print "You received the point\n"
             sleep(3)
-            return 1
             
         elif user == self.papier and cpu == self.stein:
             print "You received the point\n"
             sleep(3)
-            return 1
             
         elif user == self.stein and cpu == self.schere:
             print "You received the point\n"
             sleep(3)
-            return 1
             
         else:
             print "The CPU receives a point\n"
             sleep(3)
-            return 2
 
            
     def next_round(self):
