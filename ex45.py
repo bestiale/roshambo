@@ -8,6 +8,9 @@ from time import sleep
 class Game(object):
     user_pt = 0
     cpu_pt = 0
+    schere = 1
+    stein = 2
+    papier = 3
 
     def play(self):
         name = self.intro()
@@ -17,13 +20,8 @@ class Game(object):
                 user_hand = self.next_round()
                 cpu_hand = self.cpu_hand()
                 point = self.check(user_hand, cpu_hand)
-                if point == 1:
-                    self.user_pt += 1
-                elif point == 2:
-                    self.cpu_pt += 1
-                else:
-                    pass
                 self.print_hand(user_hand, cpu_hand, point)
+                self.points(user_hand, cpu_hand, point)
         except (EOFError, KeyboardInterrupt):
             self.finish(name, self.cpu_pt, self.user_pt)
         
@@ -41,36 +39,24 @@ class Game(object):
         return cpu
 
     def check(self, user, cpu):
-        schere = 1
-        stein = 2
-        papier = 3
         
         if user == cpu:
-            print "Nobody receives the point\n"
-            sleep(3)
             return 0
             
-        elif user == schere and cpu == papier:
-            print "You received the point\n"
-            sleep(3)
+        elif user == self.schere and cpu == self.papier:
             return 1
             
-        elif user == papier and cpu == stein:
-            print "You received the point\n"
-            sleep(3)
+        elif user == self.papier and cpu == self.stein:
             return 1
             
-        elif user == stein and cpu == schere:
-            print "You received the point\n"
-            sleep(3)
+        elif user == self.stein and cpu == self.schere:
             return 1
             
         else:
-            print "The CPU receives a point\n"
-            sleep(3)
             return 2
             
     def print_hand(self, user, cpu, point):
+
         if user == 1:
             print "\nYour hand is: Schere"
         elif user == 2:
@@ -86,8 +72,44 @@ class Game(object):
             print "The CPU has: Papier\n"
         else:
             pass
+
+    def points(self, user, cpu, point):
+
+        if point == 1:
+            self.user_pt += 1
+        elif point == 2:
+            self.cpu_pt += 1
+        else:
+            pass
+
+        if user == cpu:
+            print "Nobody receives the point\n"
+            sleep(3)
+            return 0
             
+        elif user == self.schere and cpu == self.papier:
+            print "You received the point\n"
+            sleep(3)
+            return 1
+            
+        elif user == self.papier and cpu == self.stein:
+            print "You received the point\n"
+            sleep(3)
+            return 1
+            
+        elif user == self.stein and cpu == self.schere:
+            print "You received the point\n"
+            sleep(3)
+            return 1
+            
+        else:
+            print "The CPU receives a point\n"
+            sleep(3)
+            return 2
+
+           
     def next_round(self):
+
         user_hand = 0
         
         print "Please choose your hand: \n"
