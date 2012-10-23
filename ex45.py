@@ -15,15 +15,15 @@ class Game(object):
         try:
             while True: 
                 user_hand = self.next_round()
-                print "User has %s at the moment" % user_hand
-                point = self.check(user_hand)
+                cpu_hand = self.cpu_hand()
+                point = self.check(user_hand, cpu_hand)
                 if point == 1:
                     self.user_pt += 1
                 elif point == 2:
                     self.cpu_pt += 1
                 else:
                     pass
-                self.print_hand(self.user_pt, self.cpu_pt)
+                self.print_hand(user_hand, cpu_hand, point)
         except (EOFError, KeyboardInterrupt):
             self.finish(name, self.cpu_pt, self.user_pt)
         
@@ -36,29 +36,31 @@ class Game(object):
         sleep(1)
         return name
         
-        
-    def check(self, user):
-        cpu_hand = randint(1, 3)
+    def cpu_hand(self):
+        cpu = randint(1, 3)
+        return cpu
+
+    def check(self, user, cpu):
         schere = 1
         stein = 2
         papier = 3
         
-        if user == cpu_hand:
+        if user == cpu:
             print "Nobody receives the point\n"
             sleep(3)
             return 0
             
-        elif user == schere and cpu_hand == papier:
+        elif user == schere and cpu == papier:
             print "You received the point\n"
             sleep(3)
             return 1
             
-        elif user == papier and cpu_hand == stein:
+        elif user == papier and cpu == stein:
             print "You received the point\n"
             sleep(3)
             return 1
             
-        elif user == stein and cpu_hand == schere:
+        elif user == stein and cpu == schere:
             print "You received the point\n"
             sleep(3)
             return 1
@@ -68,7 +70,7 @@ class Game(object):
             sleep(3)
             return 2
             
-    def print_hand(self, user, cpu):
+    def print_hand(self, user, cpu, point):
         if user == 1:
             print "\nYour hand is: Schere"
         elif user == 2:
