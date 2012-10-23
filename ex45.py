@@ -6,10 +6,10 @@ from random import randint
 from time import sleep
 
 class Game(object):
+    user_pt = 0
+    cpu_pt = 0
 
     def play(self):
-        user_pt = 0
-        cpu_pt = 0
         name = self.intro()
 
         try:
@@ -18,14 +18,15 @@ class Game(object):
                 print "User has %s at the moment" % user_hand
                 point = self.check(user_hand)
                 if point == 1:
-                    user_pt += 1
+                    self.user_pt += 1
                 elif point == 2:
-                    cpu_pt += 1
+                    self.cpu_pt += 1
                 else:
                     pass
-                
+                self.print_hand(self.user_pt, self.cpu_pt)
         except (EOFError, KeyboardInterrupt):
-            self.finish(name, cpu_pt, user_pt)
+            self.finish(name, self.cpu_pt, self.user_pt)
+        
             
     def intro(self):
         name = raw_input("Please enter your name: > ")
@@ -41,22 +42,6 @@ class Game(object):
         schere = 1
         stein = 2
         papier = 3
-        
-        if user == 1:
-            print "\nYour hand is: Schere"
-        elif user == 2:
-            print "\nYour hand is: Stein"
-        else:
-            print "\nYour hand is: Papier"
-            
-        if cpu_hand == 1:
-            print "The CPU has: Schere\n"
-        elif cpu_hand == 2:
-            print "The CPU has: Stein\n"
-        elif cpu_hand == 3:
-            print "The CPU has: Papier\n"
-        else:
-            pass
         
         if user == cpu_hand:
             print "Nobody receives the point\n"
@@ -83,6 +68,22 @@ class Game(object):
             sleep(3)
             return 2
             
+    def print_hand(self, user, cpu):
+        if user == 1:
+            print "\nYour hand is: Schere"
+        elif user == 2:
+            print "\nYour hand is: Stein"
+        else:
+            print "\nYour hand is: Papier"
+            
+        if cpu == 1:
+            print "The CPU has: Schere\n"
+        elif cpu == 2:
+            print "The CPU has: Stein\n"
+        elif cpu == 3:
+            print "The CPU has: Papier\n"
+        else:
+            pass
             
     def next_round(self):
         user_hand = 0
