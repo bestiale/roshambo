@@ -1,17 +1,21 @@
 #!/usr/bin/python
 # encoding: utf-8
 
+
+
 import sys
 from random import randint
 from time import sleep
 
 class Game(object):
 
-    user_pt = 0
-    cpu_pt = 0
     schere = 1
     stein = 2
     papier = 3
+
+    def __init__(self):
+        self.user_pt = 0
+        self.cpu_pt = 0
 
     def play(self):
 
@@ -42,40 +46,39 @@ class Game(object):
         cpu = randint(1, 3)
         return cpu
 
-    def check(self, user, cpu):
+    def check(self, user_hand, cpu_hand):
         
-        if user == cpu:
+        if user_hand == cpu_hand:
             return 0
             
-        elif user == self.schere and cpu == self.papier:
+        elif user_hand == Game.schere and cpu_hand == Game.papier:
             return 1
             
-        elif user == self.papier and cpu == self.stein:
+        elif user_hand == Game.papier and cpu_hand == Game.stein:
             return 1
             
-        elif user == self.stein and cpu == self.schere:
+        elif user_hand == Game.stein and cpu_hand == Game.schere:
             return 1
             
         else:
             return 2
             
-    def print_hand(self, user, cpu, point):
+    def print_hand(self, user_hand, cpu_hand, point):
 
-        if user == 1:
+        if user_hand == 1:
             print "\nYour hand is: Schere"
-        elif user == 2:
+        elif user_hand == 2:
             print "\nYour hand is: Stein"
         else:
             print "\nYour hand is: Papier"
             
-        if cpu == 1:
+        if cpu_hand == 1:
             print "The CPU has: Schere\n"
-        elif cpu == 2:
+        elif cpu_hand == 2:
             print "The CPU has: Stein\n"
-        elif cpu == 3:
+        elif cpu_hand == 3:
             print "The CPU has: Papier\n"
-        else:
-            pass
+
 
     def points(self, user, cpu, point):
 
@@ -116,14 +119,15 @@ class Game(object):
         print "2. Stein \n"
         print "3. Papier \n"
         print "(To quit press CTRL-D)"
-        try:
+
+        valid_input = False
+        while not valid_input:
             user_hand = int(raw_input("> "))
-            if user_hand not in range(1,4):
-                print "This number is not valid, please try again"
-                return self.next_round()
-        except ValueError:
-            print "This is not a number, please try again"
-            return self.next_round()
+            if user_hand not in range(1, 4):
+                print("Thats not a valid option, please try again")
+            else:
+                valid_input = True 
+            
         return user_hand
         
     def finish(self, name, cpu_pt, user_pt):
