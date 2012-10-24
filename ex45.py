@@ -124,11 +124,6 @@ class Game(object):
                     valid_input = True    
             except ValueError:
                 print "Thats not a number, please try again"
-           # user_hand = int(raw_input("> "))
-            #if type(user_hand) != int:
-                #print "not int"
-            #if user_hand not in range(1, 4) and user_hand :
-                #print "Thats not a valid option, please try again"
             
         return user_hand
         
