@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # encoding: utf-8
 
-
-
 import sys
 from random import randint
 from time import sleep
@@ -14,8 +12,8 @@ class Game(object):
     papier = 3
 
     def __init__(self):
-        self.user_pt = 0
-        self.cpu_pt = 0
+        self.user_points = 0
+        self.cpu_points = 0
 
     def play(self):
 
@@ -23,13 +21,15 @@ class Game(object):
 
         try:
             while True: 
-                user_hand = self.next_round()
+                user_hand = self.user_hand()
                 cpu_hand = self.cpu_hand()
                 point = self.check(user_hand, cpu_hand)
                 self.print_hand(user_hand, cpu_hand, point)
-                self.points(user_hand, cpu_hand, point)
+                self.point_handler(point)
+                self.print_point(user_hand, cpu_hand)
+                sleep(3)
         except (EOFError, KeyboardInterrupt):
-            self.finish(name, self.cpu_pt, self.user_pt)
+            self.finish(name, self.cpu_points, self.user_points)
         
             
     def intro(self):
@@ -43,8 +43,7 @@ class Game(object):
         
     def cpu_hand(self):
 
-        cpu = randint(1, 3)
-        return cpu
+        return randint(1, 3)
 
     def check(self, user_hand, cpu_hand):
         
@@ -80,37 +79,32 @@ class Game(object):
             print "The CPU has: Papier\n"
 
 
-    def points(self, user, cpu, point):
+    def point_handler(self, point):
 
         if point == 1:
-            self.user_pt += 1
+            self.user_points += 1
         elif point == 2:
-            self.cpu_pt += 1
-        else:
-            pass
+            self.cpu_points += 1
 
-        if user == cpu:
+    def print_point(self, user_hand, cpu_hand):
+
+        if user_hand == cpu_hand:
             print "Nobody receives the point\n"
-            sleep(3)
             
-        elif user == self.schere and cpu == self.papier:
+        elif user_hand == Game.schere and cpu_hand == Game.papier:
             print "You received the point\n"
-            sleep(3)
             
-        elif user == self.papier and cpu == self.stein:
+        elif user_hand == Game.papier and cpu_hand == Game.stein:
             print "You received the point\n"
-            sleep(3)
             
-        elif user == self.stein and cpu == self.schere:
+        elif user_hand == Game.stein and cpu_hand == Game.schere:
             print "You received the point\n"
-            sleep(3)
             
         else:
             print "The CPU receives a point\n"
-            sleep(3)
 
            
-    def next_round(self):
+    def user_hand(self):
 
         user_hand = 0
         
@@ -130,12 +124,12 @@ class Game(object):
             
         return user_hand
         
-    def finish(self, name, cpu_pt, user_pt):
+    def finish(self, name, cpu_points, user_points):
         print "\n_____________________________"
-        print "\nResult: %s %d CPU %d\n" % (name, user_pt, cpu_pt)
-        if user_pt > cpu_pt:
+        print "\nResult: %s %d CPU %d\n" % (name, user_points, cpu_points)
+        if user_points > cpu_points:
             print "You won - Good work :)"
-        elif user_pt < cpu_pt:
+        elif user_points < cpu_points:
             print "You lost! I'm sorry"
         else:
             print "Nobody has won! Try again!"
