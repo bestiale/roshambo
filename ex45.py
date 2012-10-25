@@ -25,7 +25,7 @@ class Roshambo(object):
                     user_hand = self.user_hand()
                     cpu_hand = self.cpu_hand()
                     point = self.check_hand(user_hand, cpu_hand)
-                    self.print_hand(user_hand, cpu_hand)
+                    self.print_hand(self.name, user_hand, cpu_hand)
                     self.point_handler(point)
                     self.print_point(user_hand, cpu_hand)
                     sleep(3)
@@ -58,14 +58,14 @@ class Roshambo(object):
             return 2
 
             
-    def print_hand(self, user_hand, cpu_hand):
+    def print_hand(self, user_name, user_hand, cpu_hand):
 
         if user_hand == 1:
-            print "\nYour hand is: Schere"
+            print "\n%s's hand is: Schere" % user_name
         elif user_hand == 2:
-            print "\nYour hand is: Stein"
+            print "\n%s's hand is: Stein" % user_name
         else:
-            print "\nYour hand is: Papier"
+            print "\n%s's hand is: Papier" % user_name
             
         if cpu_hand == 1:
             print "The CPU has: Schere\n"
@@ -149,14 +149,12 @@ class CpuGame(Roshambo):
                     cpu_hand = Roshambo.cpu_hand(self)
                     cpu2_hand = Roshambo.cpu_hand(self)
                     point = Roshambo.check_hand(self, cpu_hand, cpu2_hand)
-                    Roshambo.print_hand(self, cpu_hand, cpu2_hand)
+                    Roshambo.print_hand(self, self.name, cpu_hand, cpu2_hand)
                     Roshambo.point_handler(self, point)
                     Roshambo.print_point(self, cpu_hand, cpu2_hand)
                     sleep(3)
         except (EOFError, KeyboardInterrupt):
             self.finish()
 
-
-
-a_game = CpuGame()
+a_game = ConsoleGame()
 a_game.play()
