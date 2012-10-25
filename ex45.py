@@ -15,14 +15,16 @@ class Game(object):
         self.user_points = 0
         self.cpu_points = 0
         self.name = ""
+        roundcount = 0
 
     def play(self):
 
         self.intro()
         whoplay = self.who_play()
+        playmode = self.playmode()
 
         try:
-            if whoplay == 1:
+            if whoplay == 1 and playmode == 2:
                 while True: 
                     user_hand = self.user_hand()
                     cpu_hand = self.cpu_hand()
@@ -31,6 +33,8 @@ class Game(object):
                     self.point_handler(point)
                     self.print_point(user_hand, cpu_hand)
                     sleep(3)
+            elif whoplay == 1 and playmode == 1:
+                self.read_highscore()
             else:
                 self.name = self.name + "_CPU"
                 while True:
@@ -55,7 +59,7 @@ class Game(object):
 
     def who_play(self):
 
-        print "You want let play the CPU instead of you?"
+        print "You want let play the CPU instead of you?\n"
         print "1. I want to play self"
         print "2. I want to let play the CPU"
 
@@ -71,6 +75,26 @@ class Game(object):
                 print "Thats not a number, please try again"
 
         return player
+
+    def playmode(self):
+        print "You want to try to set a new Highscore?"
+        print "You will have only 10 rounds to try it"
+        print "1. Yes i want set a new Highscore"
+        print "2. No. I just want to play for fun"
+
+        valid_input = False
+        while not valid_input:
+            try:
+                playmode = int(raw_input("> "))
+                if playmode not in range(1, 3):
+                    print "Thats not a valid option, please try again"
+                else:
+                    valid_input = True    
+            except ValueError:
+                print "Thats not a number, please try again"
+
+        return playmode
+
         
     def cpu_hand(self):
 
@@ -105,7 +129,6 @@ class Game(object):
         elif cpu_hand == 3:
             print "The CPU has: Papier\n"
 
-
     def point_handler(self, point):
 
         if point == 1:
@@ -125,8 +148,7 @@ class Game(object):
             print "You received the point\n"    
         else:
             print "The CPU receives a point\n"
-
-           
+  
     def user_hand(self):
 
         user_hand = 0
@@ -149,6 +171,17 @@ class Game(object):
                 print "Thats not a number, please try again"
             
         return user_hand
+
+    def read_highscore(self):
+        filename = "highscore.txt"
+        highscore_file = open(filename, "r")
+        print highscore_file.read()
+
+    def write_highscore(self):
+        filename = "highscore.txt"
+        highscore_file = open(filename, "w")
+        highscore_file.write(self.name":" self.user_points)
+        print "Highscore saved"
         
     def finish(self):
         print "\n_____________________________"
