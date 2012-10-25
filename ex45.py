@@ -5,7 +5,7 @@ import sys
 from random import randint
 from time import sleep
 
-class Game(object):
+class Roshambo(object):
 
     schere = 1
     stein = 2
@@ -15,40 +15,23 @@ class Game(object):
         self.user_points = 0
         self.cpu_points = 0
         self.name = ""
-        roundcount = 0
 
     def play(self):
 
         self.intro()
-        whoplay = self.who_play()
-        playmode = self.playmode()
 
         try:
-            if whoplay == 1 and playmode == 2:
-                while True: 
+            while True: 
                     user_hand = self.user_hand()
                     cpu_hand = self.cpu_hand()
-                    point = self.check(user_hand, cpu_hand)
+                    point = self.check_hand(user_hand, cpu_hand)
                     self.print_hand(user_hand, cpu_hand)
                     self.point_handler(point)
                     self.print_point(user_hand, cpu_hand)
                     sleep(3)
-            elif whoplay == 1 and playmode == 1:
-                self.read_highscore()
-            else:
-                self.name = self.name + "_CPU"
-                while True:
-                    first_cpu_hand = self.cpu_hand()
-                    second_cpu_hand = self.cpu_hand()
-                    point = self.check(first_cpu_hand, second_cpu_hand)
-                    self.print_hand(first_cpu_hand, second_cpu_hand)
-                    self.point_handler(point)
-                    self.print_point(first_cpu_hand, second_cpu_hand)
-                    sleep(3)
         except (EOFError, KeyboardInterrupt):
             self.finish()
-        
-            
+               
     def intro(self):
         
         self.name = raw_input("Please enter your name: > ")
@@ -56,62 +39,24 @@ class Game(object):
         print "Hello %s :) " % self.name
         print "************************\n"
         sleep(1)
-
-    def who_play(self):
-
-        print "You want let play the CPU instead of you?\n"
-        print "1. I want to play self"
-        print "2. I want to let play the CPU"
-
-        valid_input = False
-        while not valid_input:
-            try:
-                player = int(raw_input("> "))
-                if player not in range(1, 3):
-                    print "Thats not a valid option, please try again"
-                else:
-                    valid_input = True    
-            except ValueError:
-                print "Thats not a number, please try again"
-
-        return player
-
-    def playmode(self):
-        print "You want to try to set a new Highscore?"
-        print "You will have only 10 rounds to try it"
-        print "1. Yes i want set a new Highscore"
-        print "2. No. I just want to play for fun"
-
-        valid_input = False
-        while not valid_input:
-            try:
-                playmode = int(raw_input("> "))
-                if playmode not in range(1, 3):
-                    print "Thats not a valid option, please try again"
-                else:
-                    valid_input = True    
-            except ValueError:
-                print "Thats not a number, please try again"
-
-        return playmode
-
         
     def cpu_hand(self):
 
         return randint(1, 3)
 
-    def check(self, user_hand, cpu_hand):
+    def check_hand(self, user_hand, cpu_hand):
         
         if user_hand == cpu_hand:
             return 0
-        elif user_hand == Game.schere and cpu_hand == Game.papier:
+        elif user_hand == Roshambo.schere and cpu_hand == Roshambo.papier:
             return 1 
-        elif user_hand == Game.papier and cpu_hand == Game.stein:
+        elif user_hand == Roshambo.papier and cpu_hand == Roshambo.stein:
             return 1
-        elif user_hand == Game.stein and cpu_hand == Game.schere:
+        elif user_hand == Roshambo.stein and cpu_hand == Roshambo.schere:
             return 1
         else:
             return 2
+
             
     def print_hand(self, user_hand, cpu_hand):
 
@@ -140,11 +85,11 @@ class Game(object):
 
         if user_hand == cpu_hand:
             print "Nobody receives the point\n"  
-        elif user_hand == Game.schere and cpu_hand == Game.papier:
+        elif user_hand == Roshambo.schere and cpu_hand == Roshambo.papier:
             print "You received the point\n"    
-        elif user_hand == Game.papier and cpu_hand == Game.stein:
+        elif user_hand == Roshambo.papier and cpu_hand == Roshambo.stein:
             print "You received the point\n"    
-        elif user_hand == Game.stein and cpu_hand == Game.schere:
+        elif user_hand == Roshambo.stein and cpu_hand == Roshambo.schere:
             print "You received the point\n"    
         else:
             print "The CPU receives a point\n"
@@ -171,17 +116,6 @@ class Game(object):
                 print "Thats not a number, please try again"
             
         return user_hand
-
-    def read_highscore(self):
-        filename = "highscore.txt"
-        highscore_file = open(filename, "r")
-        print highscore_file.read()
-
-    def write_highscore(self):
-        filename = "highscore.txt"
-        highscore_file = open(filename, "w")
-        highscore_file.write(self.name":" self.user_points)
-        print "Highscore saved"
         
     def finish(self):
         print "\n_____________________________"
@@ -193,6 +127,36 @@ class Game(object):
         else:
             print "Nobody has won! Try again!"
         print "\nBye %s\n" % self.name
+
             
-a_game = Game()
+class ConsoleGame(Roshambo):
+
+    def __init__(self):
+        self.name = ""
+        self.user_points = 0
+        self.cpu_points = 0
+
+class CpuGame(Roshambo):
+
+    def __init__(self):
+        self.name = "CPU"
+        self.user_points = 0
+        self.cpu_points = 0
+
+    def play(self):
+        try:
+            while True: 
+                    cpu_hand = Roshambo.cpu_hand(self)
+                    cpu2_hand = Roshambo.cpu_hand(self)
+                    point = Roshambo.check_hand(self, cpu_hand, cpu2_hand)
+                    Roshambo.print_hand(self, cpu_hand, cpu2_hand)
+                    Roshambo.point_handler(self, point)
+                    Roshambo.print_point(self, cpu_hand, cpu2_hand)
+                    sleep(3)
+        except (EOFError, KeyboardInterrupt):
+            self.finish()
+
+
+
+a_game = CpuGame()
 a_game.play()
