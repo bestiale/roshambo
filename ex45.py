@@ -14,32 +14,63 @@ class Game(object):
     def __init__(self):
         self.user_points = 0
         self.cpu_points = 0
+        self.name = ""
 
     def play(self):
 
-        name = self.intro()
+        self.intro()
+        whoplay = self.who_play()
 
         try:
-            while True: 
-                user_hand = self.user_hand()
-                cpu_hand = self.cpu_hand()
-                point = self.check(user_hand, cpu_hand)
-                self.print_hand(user_hand, cpu_hand, point)
-                self.point_handler(point)
-                self.print_point(user_hand, cpu_hand)
-                sleep(3)
+            if whoplay == 1:
+                while True: 
+                    user_hand = self.user_hand()
+                    cpu_hand = self.cpu_hand()
+                    point = self.check(user_hand, cpu_hand)
+                    self.print_hand(user_hand, cpu_hand)
+                    self.point_handler(point)
+                    self.print_point(user_hand, cpu_hand)
+                    sleep(3)
+            else:
+                self.name = self.name + "_CPU"
+                while True:
+                    first_cpu_hand = self.cpu_hand()
+                    second_cpu_hand = self.cpu_hand()
+                    point = self.check(first_cpu_hand, second_cpu_hand)
+                    self.print_hand(first_cpu_hand, second_cpu_hand)
+                    self.point_handler(point)
+                    self.print_point(first_cpu_hand, second_cpu_hand)
+                    sleep(3)
         except (EOFError, KeyboardInterrupt):
-            self.finish(name, self.cpu_points, self.user_points)
+            self.finish()
         
             
     def intro(self):
         
-        name = raw_input("Please enter your name: > ")
+        self.name = raw_input("Please enter your name: > ")
         print "\n************************"
-        print "Hello %s :) " % name
+        print "Hello %s :) " % self.name
         print "************************\n"
         sleep(1)
-        return name
+
+    def who_play(self):
+
+        print "You want let play the CPU instead of you?"
+        print "1. I want to play self"
+        print "2. I want to let play the CPU"
+
+        valid_input = False
+        while not valid_input:
+            try:
+                player = int(raw_input("> "))
+                if player not in range(1, 3):
+                    print "Thats not a valid option, please try again"
+                else:
+                    valid_input = True    
+            except ValueError:
+                print "Thats not a number, please try again"
+
+        return player
         
     def cpu_hand(self):
 
@@ -49,20 +80,16 @@ class Game(object):
         
         if user_hand == cpu_hand:
             return 0
-            
         elif user_hand == Game.schere and cpu_hand == Game.papier:
-            return 1
-            
+            return 1 
         elif user_hand == Game.papier and cpu_hand == Game.stein:
             return 1
-            
         elif user_hand == Game.stein and cpu_hand == Game.schere:
             return 1
-            
         else:
             return 2
             
-    def print_hand(self, user_hand, cpu_hand, point):
+    def print_hand(self, user_hand, cpu_hand):
 
         if user_hand == 1:
             print "\nYour hand is: Schere"
@@ -89,17 +116,13 @@ class Game(object):
     def print_point(self, user_hand, cpu_hand):
 
         if user_hand == cpu_hand:
-            print "Nobody receives the point\n"
-            
+            print "Nobody receives the point\n"  
         elif user_hand == Game.schere and cpu_hand == Game.papier:
-            print "You received the point\n"
-            
+            print "You received the point\n"    
         elif user_hand == Game.papier and cpu_hand == Game.stein:
-            print "You received the point\n"
-            
+            print "You received the point\n"    
         elif user_hand == Game.stein and cpu_hand == Game.schere:
-            print "You received the point\n"
-            
+            print "You received the point\n"    
         else:
             print "The CPU receives a point\n"
 
@@ -127,16 +150,16 @@ class Game(object):
             
         return user_hand
         
-    def finish(self, name, cpu_points, user_points):
+    def finish(self):
         print "\n_____________________________"
-        print "\nResult: %s %d CPU %d\n" % (name, user_points, cpu_points)
-        if user_points > cpu_points:
+        print "\nResult: %s %d CPU %d\n" % (self.name, self.user_points, self.cpu_points)
+        if self.user_points > self.cpu_points:
             print "You won - Good work :)"
-        elif user_points < cpu_points:
+        elif self.user_points < self.cpu_points:
             print "You lost! I'm sorry"
         else:
             print "Nobody has won! Try again!"
-        print "\nBye %s\n" % name
+        print "\nBye %s\n" % self.name
             
 a_game = Game()
 a_game.play()
