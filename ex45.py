@@ -41,8 +41,7 @@ class Roshambo(object):
             return 1
         else:
             return 2
-
-            
+  
     def print_hand(self, user_name, user_hand, cpu_hand):
 
         if user_hand == 1:
@@ -103,19 +102,19 @@ class ConsoleGame(object):
 
     def play(self):
 
-        name = self.game.intro()
+        self.name = self.game.intro()
 
         try:
             while True: 
                     user_hand = self.user_hand()
                     cpu_hand = self.game.cpu_hand()
                     point = self.game.check_hand(user_hand, cpu_hand)
-                    self.game.print_hand(name, user_hand, cpu_hand)
+                    self.game.print_hand(self.name, user_hand, cpu_hand)
                     self.game.point_handler(point)
                     self.game.print_point(user_hand, cpu_hand)
                     sleep(3)
         except (EOFError, KeyboardInterrupt):
-            self.game.print_result(name)
+            self.game.print_result(self.name)
 
 
     def user_hand(self):
@@ -144,22 +143,26 @@ class ConsoleGame(object):
 class CpuGame(object):
 
     def __init__(self):
+        self.game = Roshambo()
         self.name = "CPU"
         self.player1_points = 0
         self.player2_points = 0
 
     def play(self):
+        print "\n\n***************************"
+        print "Welcome to CPU vs CPU Mode"
+        print "***************************\n"
         try:
             while True: 
-                    cpu_hand = Roshambo.cpu_hand(self)
-                    cpu2_hand = Roshambo.cpu_hand(self)
-                    point = Roshambo.check_hand(self, cpu_hand, cpu2_hand)
-                    Roshambo.print_hand(self, self.name, cpu_hand, cpu2_hand)
-                    Roshambo.point_handler(self, point)
-                    Roshambo.print_point(self, cpu_hand, cpu2_hand)
+                    cpu_hand = self.game.cpu_hand()
+                    cpu2_hand = self.game.cpu_hand()
+                    point = self.game.check_hand(cpu_hand, cpu2_hand)
+                    self.game.print_hand(self.name, cpu_hand, cpu2_hand)
+                    self.game.point_handler(point)
+                    self.game.print_point(cpu_hand, cpu2_hand)
                     sleep(3)
         except (EOFError, KeyboardInterrupt):
-            Roshambo.print_result()
+            self.game.print_result(self.name)
 
 a_game = ConsoleGame()
 a_game.play()
