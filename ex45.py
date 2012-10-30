@@ -7,13 +7,13 @@ from time import sleep
 
 class Roshambo(object):
 
-    schere = 1
-    stein = 2
-    papier = 3
+    SCHERE = 1
+    STEIN = 2
+    PAPIER = 3
 
     def __init__(self):
-        self.user_points = 0
-        self.cpu_points = 0
+        self.player1_points = 0
+        self.player2_points = 0
         self.name = ""
 
     def play(self):
@@ -30,7 +30,7 @@ class Roshambo(object):
                     self.print_point(user_hand, cpu_hand)
                     sleep(3)
         except (EOFError, KeyboardInterrupt):
-            self.finish()
+            self.print_result()
                
     def intro(self):
         
@@ -48,11 +48,11 @@ class Roshambo(object):
         
         if user_hand == cpu_hand:
             return 0
-        elif user_hand == Roshambo.schere and cpu_hand == Roshambo.papier:
+        elif user_hand == Roshambo.SCHERE and cpu_hand == Roshambo.PAPIER:
             return 1 
-        elif user_hand == Roshambo.papier and cpu_hand == Roshambo.stein:
+        elif user_hand == Roshambo.PAPIER and cpu_hand == Roshambo.STEIN:
             return 1
-        elif user_hand == Roshambo.stein and cpu_hand == Roshambo.schere:
+        elif user_hand == Roshambo.STEIN and cpu_hand == Roshambo.SCHERE:
             return 1
         else:
             return 2
@@ -77,19 +77,19 @@ class Roshambo(object):
     def point_handler(self, point):
 
         if point == 1:
-            self.user_points += 1
+            self.player1_points += 1
         elif point == 2:
-            self.cpu_points += 1
+            self.player2_points += 1
 
     def print_point(self, user_hand, cpu_hand):
 
         if user_hand == cpu_hand:
             print "Nobody receives the point\n"  
-        elif user_hand == Roshambo.schere and cpu_hand == Roshambo.papier:
+        elif user_hand == Roshambo.SCHERE and cpu_hand == Roshambo.PAPIER:
             print "You received the point\n"    
-        elif user_hand == Roshambo.papier and cpu_hand == Roshambo.stein:
+        elif user_hand == Roshambo.PAPIER and cpu_hand == Roshambo.STEIN:
             print "You received the point\n"    
-        elif user_hand == Roshambo.stein and cpu_hand == Roshambo.schere:
+        elif user_hand == Roshambo.STEIN and cpu_hand == Roshambo.SCHERE:
             print "You received the point\n"    
         else:
             print "The CPU receives a point\n"
@@ -117,12 +117,12 @@ class Roshambo(object):
             
         return user_hand
         
-    def finish(self):
+    def print_result(self):
         print "\n_____________________________"
-        print "\nResult: %s %d CPU %d\n" % (self.name, self.user_points, self.cpu_points)
-        if self.user_points > self.cpu_points:
+        print "\nResult: %s %d CPU %d\n" % (self.name, self.player1_points, self.player2_points)
+        if self.player1_points > self.player2_points:
             print "You won - Good work :)"
-        elif self.user_points < self.cpu_points:
+        elif self.player1_points < self.player2_points:
             print "You lost! I'm sorry"
         else:
             print "Nobody has won! Try again!"
@@ -133,15 +133,15 @@ class ConsoleGame(Roshambo):
 
     def __init__(self):
         self.name = ""
-        self.user_points = 0
-        self.cpu_points = 0
+        self.player1_points = 0
+        self.player2_points = 0
 
 class CpuGame(Roshambo):
 
     def __init__(self):
         self.name = "CPU"
-        self.user_points = 0
-        self.cpu_points = 0
+        self.player1_points = 0
+        self.player2_points = 0
 
     def play(self):
         try:
@@ -154,7 +154,7 @@ class CpuGame(Roshambo):
                     Roshambo.print_point(self, cpu_hand, cpu2_hand)
                     sleep(3)
         except (EOFError, KeyboardInterrupt):
-            self.finish()
+            self.print_result
 
-a_game = ConsoleGame()
+a_game = CpuGame()
 a_game.play()
