@@ -15,30 +15,15 @@ class Roshambo(object):
         self.player1_points = 0
         self.player2_points = 0
         self.name = ""
-
-    def play(self):
-
-        self.intro()
-
-        try:
-            while True: 
-                    user_hand = self.user_hand()
-                    cpu_hand = self.cpu_hand()
-                    point = self.check_hand(user_hand, cpu_hand)
-                    self.print_hand(self.name, user_hand, cpu_hand)
-                    self.point_handler(point)
-                    self.print_point(user_hand, cpu_hand)
-                    sleep(3)
-        except (EOFError, KeyboardInterrupt):
-            self.print_result()
                
     def intro(self):
         
-        self.name = raw_input("Please enter your name: > ")
+        name = raw_input("Please enter your name: > ")
         print "\n************************"
-        print "Hello %s :) " % self.name
+        print "Hello %s :) " % name
         print "************************\n"
         sleep(1)
+        return name
         
     def cpu_hand(self):
 
@@ -93,7 +78,46 @@ class Roshambo(object):
             print "You received the point\n"    
         else:
             print "The CPU receives a point\n"
-  
+
+        
+    def print_result(self, name):
+        print "\n_____________________________"
+        print "\nResult: %s %d CPU %d\n" % (name, self.player1_points, self.player2_points)
+        if self.player1_points > self.player2_points:
+            print "You won - Good work :)"
+        elif self.player1_points < self.player2_points:
+            print "You lost! I'm sorry"
+        else:
+            print "Nobody has won! Try again!"
+        print "\nBye %s\n" % name
+
+            
+class ConsoleGame(object):
+
+    def __init__(self):
+        self.game = Roshambo()
+        self.name = ""
+        self.player1_points = 0
+        self.player2_points = 0
+
+
+    def play(self):
+
+        name = self.game.intro()
+
+        try:
+            while True: 
+                    user_hand = self.user_hand()
+                    cpu_hand = self.game.cpu_hand()
+                    point = self.game.check_hand(user_hand, cpu_hand)
+                    self.game.print_hand(name, user_hand, cpu_hand)
+                    self.game.point_handler(point)
+                    self.game.print_point(user_hand, cpu_hand)
+                    sleep(3)
+        except (EOFError, KeyboardInterrupt):
+            self.game.print_result(name)
+
+
     def user_hand(self):
 
         user_hand = 0
@@ -116,27 +140,8 @@ class Roshambo(object):
                 print "Thats not a number, please try again"
             
         return user_hand
-        
-    def print_result(self):
-        print "\n_____________________________"
-        print "\nResult: %s %d CPU %d\n" % (self.name, self.player1_points, self.player2_points)
-        if self.player1_points > self.player2_points:
-            print "You won - Good work :)"
-        elif self.player1_points < self.player2_points:
-            print "You lost! I'm sorry"
-        else:
-            print "Nobody has won! Try again!"
-        print "\nBye %s\n" % self.name
 
-            
-class ConsoleGame(Roshambo):
-
-    def __init__(self):
-        self.name = ""
-        self.player1_points = 0
-        self.player2_points = 0
-
-class CpuGame(Roshambo):
+class CpuGame(object):
 
     def __init__(self):
         self.name = "CPU"
@@ -154,7 +159,7 @@ class CpuGame(Roshambo):
                     Roshambo.print_point(self, cpu_hand, cpu2_hand)
                     sleep(3)
         except (EOFError, KeyboardInterrupt):
-            self.print_result
+            Roshambo.print_result()
 
-a_game = CpuGame()
+a_game = ConsoleGame()
 a_game.play()
