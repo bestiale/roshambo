@@ -95,8 +95,6 @@ class ConsoleGame(object):
     def __init__(self):
         self.game = Roshambo()
         self.name = ""
-        self.player1_points = 0
-        self.player2_points = 0
 
     def play(self):
 
@@ -118,7 +116,7 @@ class ConsoleGame(object):
 
         user_hand = 0
         
-        print "Please choose your hand: \n"
+        print "Please choose your hand:\n"
         print "1. Schere \n"
         print "2. Stein \n"
         print "3. Papier \n"
@@ -141,9 +139,7 @@ class CpuGame(object):
 
     def __init__(self):
         self.game = Roshambo()
-        self.name = "First CPU"
-        self.player1_points = 0
-        self.player2_points = 0
+        self.name = "1st CPU"
 
     def play(self):
         print "\n\n***************************"
@@ -161,5 +157,5 @@ class CpuGame(object):
         except (EOFError, KeyboardInterrupt):
             self.game.print_result(self.name)
 
-a_game = CpuGame()
+a_game = ConsoleGame()
 a_game.play()
