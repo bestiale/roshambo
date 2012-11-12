@@ -15,6 +15,7 @@ class Roshambo(object):
         self.player1_points = 0
         self.player2_points = 0
         self.name = ""
+        self.name_cpu = ""
                
     def intro(self):
         
@@ -29,20 +30,20 @@ class Roshambo(object):
 
         return randint(1, 3)
 
-    def check_hand(self, user_hand, cpu_hand):
+    def check_hand(self, player1_hand, player2_hand):
         
-        if user_hand == cpu_hand:
+        if player1_hand == player2_hand:
             return 0
-        elif user_hand == Roshambo.SCHERE and cpu_hand == Roshambo.PAPIER:
+        elif player1_hand == Roshambo.SCHERE and player2_hand == Roshambo.PAPIER:
             return 1 
-        elif user_hand == Roshambo.PAPIER and cpu_hand == Roshambo.STEIN:
+        elif player1_hand == Roshambo.PAPIER and player2_hand == Roshambo.STEIN:
             return 1
-        elif user_hand == Roshambo.STEIN and cpu_hand == Roshambo.SCHERE:
+        elif player1_hand == Roshambo.STEIN and player2_hand == Roshambo.SCHERE:
             return 1
         else:
             return 2
   
-    def print_hand(self, user_name, user_hand, cpu_hand):
+    def print_hand(self, user_name, name_cpu, user_hand, cpu_hand):
 
         if user_hand == 1:
             print "\n%s's hand is: Schere" % user_name
@@ -52,11 +53,11 @@ class Roshambo(object):
             print "\n%s's hand is: Papier" % user_name
             
         if cpu_hand == 1:
-            print "The CPU has: Schere\n"
+            print "The %s has: Schere\n" % name_cpu
         elif cpu_hand == 2:
-            print "The CPU has: Stein\n"
+            print "The %s has: Stein\n" % name_cpu
         elif cpu_hand == 3:
-            print "The CPU has: Papier\n"
+            print "The %s has: Papier\n" % name_cpu
 
     def point_handler(self, point):
 
@@ -65,22 +66,22 @@ class Roshambo(object):
         elif point == 2:
             self.player2_points += 1
 
-    def print_point(self, name, user_hand, cpu_hand):
+    def print_point(self, name, name_cpu, player1_hand, player2_hand):
 
-        if user_hand == cpu_hand:
+        if player1_hand == player2_hand:
             print "Nobody receives the point\n"  
-        elif user_hand == Roshambo.SCHERE and cpu_hand == Roshambo.PAPIER:
+        elif player1_hand == Roshambo.SCHERE and player2_hand == Roshambo.PAPIER:
             print "%s received the point\n" % name   
-        elif user_hand == Roshambo.PAPIER and cpu_hand == Roshambo.STEIN:
+        elif player1_hand == Roshambo.PAPIER and player2_hand == Roshambo.STEIN:
             print "%s received the point\n" % name   
-        elif user_hand == Roshambo.STEIN and cpu_hand == Roshambo.SCHERE:
+        elif player1_hand == Roshambo.STEIN and player2_hand == Roshambo.SCHERE:
             print "%s received the point\n" % name
         else:
-            print "The CPU receives a point\n"
+            print "The %s receives a point\n" % name_cpu
 
-    def print_result(self, name):
+    def print_result(self, name, name_cpu):
         print "\n_____________________________"
-        print "\nResult: %s %d CPU %d\n" % (name, self.player1_points, self.player2_points)
+        print "\nResult: %s %d %s %d\n" % (name, self.player1_points, name_cpu, self.player2_points)
         if self.player1_points > self.player2_points:
             print "You won - Good work :)"
         elif self.player1_points < self.player2_points:
@@ -95,6 +96,7 @@ class ConsoleGame(object):
     def __init__(self):
         self.game = Roshambo()
         self.name = ""
+        self.name_cpu = "CPU"
 
     def play(self):
 
@@ -102,12 +104,12 @@ class ConsoleGame(object):
 
         try:
             while True: 
-                    user_hand = self.user_hand()
-                    cpu_hand = self.game.cpu_hand()
-                    point = self.game.check_hand(user_hand, cpu_hand)
-                    self.game.print_hand(self.name, user_hand, cpu_hand)
+                    player1_hand = self.user_hand()
+                    player2_hand = self.game.cpu_hand()
+                    point = self.game.check_hand(player1_hand, player2_hand)
+                    self.game.print_hand(self.name, self.name_cpu, player1_hand, player2_hand)
                     self.game.point_handler(point)
-                    self.game.print_point(self.name, user_hand, cpu_hand)
+                    self.game.print_point(self.name, self.name_cpu, player1_hand, player2_hand)
                     sleep(3)
         except (EOFError, KeyboardInterrupt):
             self.game.print_result(self.name)
@@ -139,7 +141,8 @@ class CpuGame(object):
 
     def __init__(self):
         self.game = Roshambo()
-        self.name = "1st CPU"
+        self.name = "First CPU"
+        self.name_cpu = "Second CPU"
 
     def play(self):
         print "\n\n***************************"
@@ -150,12 +153,12 @@ class CpuGame(object):
                     cpu_hand = self.game.cpu_hand()
                     cpu2_hand = self.game.cpu_hand()
                     point = self.game.check_hand(cpu_hand, cpu2_hand)
-                    self.game.print_hand(self.name, cpu_hand, cpu2_hand)
+                    self.game.print_hand(self.name, self.name_cpu, cpu_hand, cpu2_hand)
                     self.game.point_handler(point)
-                    self.game.print_point(self.name, cpu_hand, cpu2_hand)
+                    self.game.print_point(self.name, self.name_cpu, cpu_hand, cpu2_hand)
                     sleep(3)
         except (EOFError, KeyboardInterrupt):
-            self.game.print_result(self.name)
+            self.game.print_result(self.name, self.name_cpu)
 
-a_game = ConsoleGame()
+a_game = CpuGame()
 a_game.play()
