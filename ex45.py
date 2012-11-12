@@ -65,20 +65,19 @@ class Roshambo(object):
         elif point == 2:
             self.player2_points += 1
 
-    def print_point(self, user_hand, cpu_hand):
+    def print_point(self, name, user_hand, cpu_hand):
 
         if user_hand == cpu_hand:
             print "Nobody receives the point\n"  
         elif user_hand == Roshambo.SCHERE and cpu_hand == Roshambo.PAPIER:
-            print "You received the point\n"    
+            print "%s received the point\n" % name   
         elif user_hand == Roshambo.PAPIER and cpu_hand == Roshambo.STEIN:
-            print "You received the point\n"    
+            print "%s received the point\n" % name   
         elif user_hand == Roshambo.STEIN and cpu_hand == Roshambo.SCHERE:
-            print "You received the point\n"    
+            print "%s received the point\n" % name
         else:
             print "The CPU receives a point\n"
 
-        
     def print_result(self, name):
         print "\n_____________________________"
         print "\nResult: %s %d CPU %d\n" % (name, self.player1_points, self.player2_points)
@@ -99,7 +98,6 @@ class ConsoleGame(object):
         self.player1_points = 0
         self.player2_points = 0
 
-
     def play(self):
 
         self.name = self.game.intro()
@@ -111,11 +109,10 @@ class ConsoleGame(object):
                     point = self.game.check_hand(user_hand, cpu_hand)
                     self.game.print_hand(self.name, user_hand, cpu_hand)
                     self.game.point_handler(point)
-                    self.game.print_point(user_hand, cpu_hand)
+                    self.game.print_point(self.name, user_hand, cpu_hand)
                     sleep(3)
         except (EOFError, KeyboardInterrupt):
             self.game.print_result(self.name)
-
 
     def user_hand(self):
 
@@ -144,7 +141,7 @@ class CpuGame(object):
 
     def __init__(self):
         self.game = Roshambo()
-        self.name = "CPU"
+        self.name = "First CPU"
         self.player1_points = 0
         self.player2_points = 0
 
@@ -159,10 +156,10 @@ class CpuGame(object):
                     point = self.game.check_hand(cpu_hand, cpu2_hand)
                     self.game.print_hand(self.name, cpu_hand, cpu2_hand)
                     self.game.point_handler(point)
-                    self.game.print_point(cpu_hand, cpu2_hand)
+                    self.game.print_point(self.name, cpu_hand, cpu2_hand)
                     sleep(3)
         except (EOFError, KeyboardInterrupt):
             self.game.print_result(self.name)
 
-a_game = ConsoleGame()
+a_game = CpuGame()
 a_game.play()
